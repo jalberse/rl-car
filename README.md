@@ -11,3 +11,7 @@ If this step fails, you may lack some dependencies. Try the following commands a
 ```
 sudo apt install swig
 ```
+
+## Playing as a human
+
+In the shell, run `python car_racing.py` to play the race as a human.
