@@ -1,4 +1,4 @@
-# Gotta go Fast
+#Gotta go Fast
 
 Running the racecar environment requires a number of dependencies, including mujoco. More information is on the [README for gym under Installation](https://github.com/openai/gym)
 
