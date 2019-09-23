@@ -1,2 +1,0 @@
-Track generation: 1247..1563 -> 316-tiles track
-Track generation: 1205..1510 -> 305-tiles track
