@@ -5,14 +5,15 @@ def rgb_to_bw_threshold(img):
     '''
     img is a 96 x 96 x 3 matrix
     Convert the image to black and white, crop out HUD, and threshold
-    Returns: 84 x 96 matrix with values of 0 (black) or 255 (white)
+    Returns: 84 x 96 matrix flattened into a 1-D tuple with values of 0 (black) or 255 (white)
 
     Tiles within track are white, off the track is black. Region with car is also white.
     '''
     bw = cv.cvtColor(img,cv.COLOR_BGR2GRAY)
     bw = bw[0:84, 0:96] # Crop out HUD at bottom
     thresh = cv.inRange(bw,0,150)
-    return thresh
+    state = tuple(thresh.reshape(1,-1)[0])
+    return state
 
     # observation is a STATE_W x STATE_H x 3 matrix
     # We convert to black and white and then threshold so that pixels on the track

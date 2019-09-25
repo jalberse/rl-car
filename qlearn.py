@@ -3,21 +3,20 @@ import numpy as np
 import cv2 as cv
 import sys
 from preprocessing import rgb_to_bw_threshold
-
+import random
 from collections import defaultdict
 
 np.set_printoptions(threshold=sys.maxsize)
 
 def e_greedy(Q,state,epsilon):
     """
-    Returns an action given Q and state
+    Returns an action key given Q and state
+    An action key {0,..,11} is mapped to a possible action in T x G x B
         Returns the optimal action given Q, s with a probability of (1-epsilon)
         Returns a random action with a probability of epsilon
     """
-
-    pass
-
-# TODO: Map action indices (of 12) to actions we can pass to env (i.e. [steer,gas,break] floats)
+    # TODO real implementation
+    return random.randint(0,11)
 
 # TODO: Each episode Terminating after 1000 timesteps rather than just when 
 #       done or exiting playfield. Why?
@@ -32,10 +31,9 @@ def e_greedy(Q,state,epsilon):
 #       so we can save it at any time.
 def q_learning_train(env, num_episodes, discount_rate = 0.99, learning_rate = 0.01, epsilon = 0.05):
     """
-
     Note gamma is discount_rate, alpha is learning_rate
 
-    Returns Q(s,a), the value for all state, action pairs in S x A
+    Returns Q(s,a), the value for all state, action pairs in S x A, after training with epsilon-greedy policy
     """
     # Initialize Q(s,a) for all s in S, a in A (mathematically)
     # In reality we initialize as each state S comes in (many states are unreachable, so don't waste time)
@@ -50,6 +48,22 @@ def q_learning_train(env, num_episodes, discount_rate = 0.99, learning_rate = 0.
     # Action space is therefore T x G x B (12 possible options)
     Q = defaultdict(lambda: np.zeros(12)) # So Q[state] is a list of 12 values - a value for each of 12 actions in the state
 
+    # Maps action_key index to action the env can understand
+    actions = [
+        [-1.,0.,0.],
+        [-1.,0.,1.],
+        [-1.,1.,0.],
+        [-1.,1.,1.],
+        [0.,0.,0.],
+        [0.,0.,1.],
+        [0.,1.,0.],
+        [0.,1.,1.],
+        [1.,0.,0.],
+        [1.,0.,1.],
+        [1.,1.,0.],
+        [1.,1.,1.],
+    ]
+
     # Keep track of information we want to plot later
     statistics = dict([
         ('rewards',np.zeros(num_episodes)), # Total reward obtained this episode
@@ -60,22 +74,25 @@ def q_learning_train(env, num_episodes, discount_rate = 0.99, learning_rate = 0.
         observation = env.reset()
         t = 0
         # Get the initial state
-        state = rgb_to_bw_threshold(observation)
+        state = rgb_to_bw_threshold(observation) # state is a flattened 1-D tuple (hashable) from original np array
+        print(type(state))
         # Game loop
         while(True):
             t += 1
             env.render() # TODO: (maybe) Delete for speed
 
             # Take action a, observe r, s'
-            action = env.action_space.sample() # TODO implement e-greedy not random
-            observation, reward, done, info = env.step(action)
+            action_key = e_greedy(Q,state,epsilon)
+            observation, reward, done, info = env.step(actions[action_key])
             new_state = rgb_to_bw_threshold(observation)
 
-            cv.imshow("State",state) # TODO delete for speed
-            cv.waitKey(1)
 
-            # TODO
+
+            #cv.imshow("State",state) # TODO delete for speed
+            #cv.waitKey(1)
+
             # Q(s,a) <- Q(s,a) + alpha[r + gamma*max_a'(Q(s',a')) - Q(s,a)]
+            Q[state][action_key] = Q[state][action_key] + learning_rate*(reward + discount_rate*Q[new_state][np.argmax(Q[new_state])] - Q[state][action_key])
             
             # s <- s'
             state = new_state
@@ -87,7 +104,7 @@ def q_learning_train(env, num_episodes, discount_rate = 0.99, learning_rate = 0.
                 print("Episode finished after {} timesteps".format(t+1))
                 break
 
-        return Q, statistics
+    return Q, statistics
 
 if __name__ == '__main__':
     env = gym.make('CarRacing-v0')
