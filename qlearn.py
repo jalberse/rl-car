@@ -100,7 +100,7 @@ def q_learning_train(env,
         # Game loop
         while(True):
             t += 1
-            env.render() # TODO uncomment/comment to render/not render racing at every step
+            env.render()
 
             # Take action a, observe r, s'
             action_key = e_greedy(Q,state,epsilon)
@@ -119,6 +119,7 @@ def q_learning_train(env,
             if done:
                 print("Episode finished after {} timesteps".format(t+1))
                 # Update statistics for the episode
+                print(f'with a reward of {reward_total}')
                 statistics['rewards'][episode_cnt] = reward_total
                 statistics['lap_times'][episode_cnt] = t+1
                 if (episode_cnt % snapshot_freq == 0 and episode_cnt != 0):
@@ -148,7 +149,7 @@ def save_snapshot(Q,statistics,directory,filename_prefix):
 
 if __name__ == '__main__':
     env = gym.make('CarRacing-v0')
-    episodes = 10000
+    episodes = 20001
     discount_rate = 0.99
     learning_rate = 0.01
     epsilon = 0.9
