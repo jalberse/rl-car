@@ -32,7 +32,15 @@ def default_action_generator():
     return np.zeros(ACTION_SPACE_SIZE)
 
 # TODO  reduce epsilon over time?
-def q_learning_train(env, num_episodes, snapshots_dir, discount_rate = 0.99, learning_rate = 0.01, epsilon = 0.05, snapshot_freq=1000):
+def q_learning_train(env, 
+                     num_episodes, 
+                     snapshots_dir, 
+                     discount_rate = 0.99, 
+                     learning_rate = 0.01, 
+                     epsilon = 0.05, 
+                     epsilon_decay = .99, 
+                     epsilon_floor = 0, 
+                     snapshot_freq=1000):
     """
     Returns Q(s,a), the value for all state, action pairs in S x A, after training with Q-learning with an epsilon-greedy policy
 
@@ -41,6 +49,8 @@ def q_learning_train(env, num_episodes, snapshots_dir, discount_rate = 0.99, lea
     discount_rate       gamma
     learning_rate       alpha
     epsilon             used in epsilon-greedy policy.
+    epsilon_decay       decay per episode
+    epsilon_floor       epsilon will not decay below this number
     run_id              used to identify the run. Creates a snapshots folder using this id to store progress
     snapshot_freq       Save Q, statistics every snapshot_freq episodes
     """
@@ -79,6 +89,9 @@ def q_learning_train(env, num_episodes, snapshots_dir, discount_rate = 0.99, lea
 
     for episode_cnt in range(num_episodes):
         print(f'Episode: {episode_cnt}')
+        if (epsilon > epsilon_floor):
+            epsilon = epsilon * epsilon_decay
+        print(f'Epsilon: {epsilon}')
         observation = env.reset()
         t = 0
         reward_total = 0
@@ -138,8 +151,11 @@ if __name__ == '__main__':
     episodes = 10000
     discount_rate = 0.99
     learning_rate = 0.01
-    epsilon = 0.05
+    epsilon = 0.9
+    epsilon_decay = .99
+    epsilon_floor = .01
     snapshot_freq = 500
+    
 
     now = datetime.datetime.now()
     timestamp = f'{now.year}_{now.month}_{now.day}_{now.hour}_{now.minute}_{now.microsecond}'
@@ -148,7 +164,15 @@ if __name__ == '__main__':
     os.mkdir(snapshots_dir)
 
     # Train the model
-    Q, statistics = q_learning_train(env,episodes,snapshots_dir,discount_rate=discount_rate,learning_rate=learning_rate,epsilon=epsilon,snapshot_freq=snapshot_freq)
+    Q, statistics = q_learning_train(
+        env,episodes,
+        snapshots_dir,
+        discount_rate=discount_rate,
+        learning_rate=learning_rate,
+        epsilon=epsilon,
+        epsilon_decay=epsilon_decay,
+        epsilon_floor=epsilon_floor,
+        snapshot_freq=snapshot_freq)
 
     # Save a snapshot of the model and statistics    
     save_snapshot(Q,statistics,snapshots_dir,'FINAL')
