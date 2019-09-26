@@ -22,7 +22,6 @@ def e_greedy(Q,state,epsilon):
         Returns the optimal action given Q, s with a probability of (1-epsilon)
         Returns a random action with a probability of epsilon
     """
-    # TODO real implementation
     if (random.random() < 1-epsilon):
         return np.argmax(Q[state])
     else:
@@ -32,17 +31,6 @@ def default_action_generator():
     # Replaces typical lambda for defaultdict so we may pickle it
     return np.zeros(ACTION_SPACE_SIZE)
 
-# TODO: Each episode Terminating after 1000 timesteps rather than just when 
-#       done or exiting playfield. Why?
-#       Our local version of car_racing.py might differ from what
-#       I'm actually importing. Check out that code and how it's setting done.
-#       Consider though: Is it best to end each episode afte 1000 steps after all?
-#       It will still learn to move forward and may cut down on episode lengths
-#       at beginning of training
-# TODO: Because we don't know how many episodes are realistic to train, try 
-#       plotting every n episodes so we at least have some plots if we can't
-#       finish the training run. Maybe a key to stop training and return Q immediately
-#       so we can save it at any time.
 # TODO  reduce epsilon over time?
 def q_learning_train(env, num_episodes, snapshots_dir, discount_rate = 0.99, learning_rate = 0.01, epsilon = 0.05, snapshot_freq=1000):
     """
@@ -98,7 +86,7 @@ def q_learning_train(env, num_episodes, snapshots_dir, discount_rate = 0.99, lea
         # Game loop
         while(True):
             t += 1
-            env.render() # TODO: (maybe) Delete for speed
+            # env.render() # TODO uncomment/comment to render/not render racing at every step
 
             # Take action a, observe r, s'
             action_key = e_greedy(Q,state,epsilon)
