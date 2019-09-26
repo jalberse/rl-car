@@ -78,15 +78,16 @@ def q_learning_train(env, num_episodes, snapshots_dir, discount_rate = 0.99, lea
     ])
 
     for episode_cnt in range(num_episodes):
+        print(f'Episode: {episode_cnt}')
         observation = env.reset()
         t = 0
         reward_total = 0
         # Get the initial state
-        state = rgb_to_bw_threshold(observation) # state is a flattened 1-D tuple (hashable) from original np array
+        state = rgb_to_bw_threshold(observation) # State is bitpacked into a uint8 tuple
         # Game loop
         while(True):
             t += 1
-            # env.render() # TODO uncomment/comment to render/not render racing at every step
+            env.render() # TODO uncomment/comment to render/not render racing at every step
 
             # Take action a, observe r, s'
             action_key = e_greedy(Q,state,epsilon)
@@ -138,7 +139,7 @@ if __name__ == '__main__':
     discount_rate = 0.99
     learning_rate = 0.01
     epsilon = 0.05
-    snapshot_freq = 1000
+    snapshot_freq = 500
 
     now = datetime.datetime.now()
     timestamp = f'{now.year}_{now.month}_{now.day}_{now.hour}_{now.minute}_{now.microsecond}'

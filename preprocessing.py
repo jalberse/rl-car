@@ -4,15 +4,20 @@ import cv2 as cv
 def rgb_to_bw_threshold(img):
     '''
     img is a 96 x 96 x 3 matrix
-    Convert the image to black and white, crop out HUD, and threshold
-    Returns: 84 x 96 matrix flattened into a 1-D tuple with values of 0 (black) or 255 (white)
+    Convert the image to black and white, crop out HUD, and threshold (84 x 96) to 0 or 1
+    Then packs that into an immutable uint8 tuple
+    Must be immutable tuple for hashing in defaultdict
 
-    Tiles within track are white, off the track is black. Region with car is also white.
+    Returns: uint8 tuple
+
+    Pixels within track are 1, off the track is 0. Region with car is also 1.
     '''
     bw = cv.cvtColor(img,cv.COLOR_BGR2GRAY)
     bw = bw[0:84, 0:96] # Crop out HUD at bottom
-    thresh = cv.inRange(bw,0,150)
-    state = tuple(thresh.reshape(1,-1)[0])
+    thresh = cv.inRange(bw,0,150) # 96x96 0 or 255
+    thresh[thresh > 0] = 1 # set to 1 if not 0
+    packed = np.packbits(thresh) # Flatten and pack into uint8 array
+    state = tuple(packed.tolist()) # pack into non-mutable tuple for hashing
     return state
 
     # observation is a STATE_W x STATE_H x 3 matrix
