@@ -125,6 +125,40 @@ class CarRacing(gym.Env, EzPickle):
 
         self.action_space = spaces.Box( np.array([-1,0,0]), np.array([+1,+1,+1]), dtype=np.float32)  # steer, gas, brake
         self.observation_space = spaces.Box(low=0, high=255, shape=(STATE_H, STATE_W, 3), dtype=np.uint8)
+        
+        CHECKPOINTS = 12
+        # Create checkpoints
+        # TODO Use a real way to keep a constant track across training runs
+        self.checkpoints = []
+        self.checkpoints.append((0, 225.0, 0.0))
+        self.checkpoints.append((0.7825323624208509, 89.6427647192468, 89.1304349066121))
+        self.checkpoints.append((1.5543323243350344, 1.783985395462951, 108.34693482727236))
+        self.checkpoints.append((1.6057305460922464, -2.2173644459530517, 63.446740574663174))
+        self.checkpoints.append((2.6175081644916047, -58.76396976672586, 33.965461046114534))
+        self.checkpoints.append((2.7871461118931458, -134.63944761816262, 49.82679389320398))
+        self.checkpoints.append((3.414113547480756, -106.41825645850612, -29.741137759708423))
+        self.checkpoints.append((3.8745797378794, -77.61403468584427, -69.87679530100709))
+        self.checkpoints.append((4.193711736042842, -33.56139367373087, -58.79641863577176))
+        self.checkpoints.append((4.928823629511352, 29.852520836123745, -135.76810358020867))
+        self.checkpoints.append((5.29734709463665, 68.99766439052978, -104.18233435806235))
+        self.checkpoints.append((5.759586531581287, 194.85571585149864, -112.5000000000001))
+        
+        self.start_alpha = 2*math.pi*(-0.5)/CHECKPOINTS
+
+        '''
+        self.checkpoints = []
+        for c in range(CHECKPOINTS):
+            alpha = 2*math.pi*c/CHECKPOINTS + self.np_random.uniform(0, 2*math.pi*1/CHECKPOINTS)
+            rad = self.np_random.uniform(TRACK_RAD/3, TRACK_RAD)
+            if c==0:
+                alpha = 0
+                rad = 1.5*TRACK_RAD
+            if c==CHECKPOINTS-1:
+                alpha = 2*math.pi*c/CHECKPOINTS
+                
+                rad = 1.5*TRACK_RAD
+            self.checkpoints.append( (alpha, rad*math.cos(alpha), rad*math.sin(alpha)) )
+        '''
 
     def seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
@@ -139,23 +173,9 @@ class CarRacing(gym.Env, EzPickle):
         self.car.destroy()
 
     def _create_track(self):
-        CHECKPOINTS = 12
+        checkpoints = self.checkpoints
 
-        # Create checkpoints
-        checkpoints = []
-        for c in range(CHECKPOINTS):
-            alpha = 2*math.pi*c/CHECKPOINTS + self.np_random.uniform(0, 2*math.pi*1/CHECKPOINTS)
-            rad = self.np_random.uniform(TRACK_RAD/3, TRACK_RAD)
-            if c==0:
-                alpha = 0
-                rad = 1.5*TRACK_RAD
-            if c==CHECKPOINTS-1:
-                alpha = 2*math.pi*c/CHECKPOINTS
-                self.start_alpha = 2*math.pi*(-0.5)/CHECKPOINTS
-                rad = 1.5*TRACK_RAD
-            checkpoints.append( (alpha, rad*math.cos(alpha), rad*math.sin(alpha)) )
-
-        # print "\n".join(str(h) for h in checkpoints)
+        print ("\n".join(str(h) for h in checkpoints))
         # self.road_poly = [ (    # uncomment this to see checkpoints
         #    [ (tx,ty) for a,tx,ty in checkpoints ],
         #    (0.7,0.7,0.9) ) ]
