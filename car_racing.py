@@ -142,7 +142,7 @@ class CarRacing(gym.Env, EzPickle):
         self.checkpoints.append((4.928823629511352, 29.852520836123745, -135.76810358020867))
         self.checkpoints.append((5.29734709463665, 68.99766439052978, -104.18233435806235))
         self.checkpoints.append((5.759586531581287, 194.85571585149864, -112.5000000000001))
-        
+
         self.start_alpha = 2*math.pi*(-0.5)/CHECKPOINTS
 
         '''
@@ -175,7 +175,7 @@ class CarRacing(gym.Env, EzPickle):
     def _create_track(self):
         checkpoints = self.checkpoints
 
-        print ("\n".join(str(h) for h in checkpoints))
+        #print ("\n".join(str(h) for h in checkpoints))
         # self.road_poly = [ (    # uncomment this to see checkpoints
         #    [ (tx,ty) for a,tx,ty in checkpoints ],
         #    (0.7,0.7,0.9) ) ]
