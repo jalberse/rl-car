@@ -248,6 +248,7 @@ class CarRacing(gym.Env, EzPickle):
             return False
 
         # Red-white border on hard turns
+        '''
         border = [False]*len(track)
         for i in range(len(track)):
             good = True
@@ -262,6 +263,7 @@ class CarRacing(gym.Env, EzPickle):
         for i in range(len(track)):
             for neg in range(BORDER_MIN_COUNT):
                 border[i-neg] |= border[i]
+        '''
 
         # Create tiles
         for i in range(len(track)):
@@ -282,6 +284,7 @@ class CarRacing(gym.Env, EzPickle):
             t.fixtures[0].sensor = True
             self.road_poly.append(( [road1_l, road1_r, road2_r, road2_l], t.color ))
             self.road.append(t)
+            '''
             if border[i]:
                 side = np.sign(beta2 - beta1)
                 b1_l = (x1 + side* TRACK_WIDTH        *math.cos(beta1), y1 + side* TRACK_WIDTH        *math.sin(beta1))
@@ -289,6 +292,7 @@ class CarRacing(gym.Env, EzPickle):
                 b2_l = (x2 + side* TRACK_WIDTH        *math.cos(beta2), y2 + side* TRACK_WIDTH        *math.sin(beta2))
                 b2_r = (x2 + side*(TRACK_WIDTH+BORDER)*math.cos(beta2), y2 + side*(TRACK_WIDTH+BORDER)*math.sin(beta2))
                 self.road_poly.append(( [b1_l, b1_r, b2_r, b2_l], (1,1,1) if i%2==0 else (1,0,0) ))
+            '''
         self.track = track
         return True
 

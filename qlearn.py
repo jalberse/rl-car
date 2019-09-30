@@ -148,7 +148,14 @@ def save_snapshot(Q,statistics,directory,filename_prefix):
     pass
 
 if __name__ == '__main__':
-    env = gym.make('CarRacing-v0')
+    gym.register(
+        id='CarRacing-v1',
+        entry_point='car_racing:CarRacing',
+        max_episode_steps=1000,
+        reward_threshold=900,
+    )
+
+    env = gym.make('CarRacing-v1')
     episodes = 20001
     discount_rate = 0.99
     learning_rate = 0.01
