@@ -23,7 +23,7 @@ def e_greedy(Q,state,epsilon):
         Returns a random action with a probability of epsilon
     """
     if (random.random() < 1-epsilon):
-        return np.argmax(Q[state])
+        return np.argmax(Q[state]) # Note for ties, will return first index
     else:
         return random.randint(0,ACTION_SPACE_SIZE-1)
 

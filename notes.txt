@@ -1,0 +1,16 @@
+## Obervations
+
+Is learning some, because will go fast down straightaways until the first left turn comes on screen.
+Will then stop, as has not had time to explore all the possible states.
+Straightaways are simpler to learn - fewer states to encounter.
+This learning in the straightaways is not reflected in the data because we only record the total reward for each episode.
+While the car will accumulate higher reward sooner, it all eventually diminishes as they miss the first left turn, leading to a faily constant total reward per episode.
+It may be interesting to record reward accumulation through each episode because of this. 
+Will try if not prohibitively expensive for memory.
+
+## Ideas
+
+- Learn on a constant track. Should greatly reduce the state space. Sacrifice generality for speed of training, though in theory our learning method should expand to randomized tracks given enough time to train.
+- Downsample even more
+- Reduce action space more - maybe only accelerate/brake with straight wheels? Only coast when turning?
+- Sum columns of reduced state and use as a weighting mechanism for left/right turns?
