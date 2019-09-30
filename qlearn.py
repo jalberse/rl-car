@@ -85,6 +85,7 @@ def q_learning_train(env,
     statistics = dict([
         ('rewards',np.zeros(num_episodes)), # Total reward obtained this episode
         ('lap_times',np.zeros(num_episodes)), # Timesteps taken in episode
+        ('max_reward_in_episode',np.zeros(num_episodes)) # Maximum total reward within each episode (NOT final/total accumulated)
     ])
 
     for episode_cnt in range(num_episodes):
@@ -95,6 +96,7 @@ def q_learning_train(env,
         observation = env.reset()
         t = 0
         reward_total = 0
+        max_reward = -9999
         # Get the initial state
         state = rgb_to_bw_threshold(observation) # State is bitpacked into a uint8 tuple
         # Game loop
@@ -116,12 +118,16 @@ def q_learning_train(env,
             # Reward across the whole episode
             reward_total += reward
 
+            if reward_total > max_reward:
+                max_reward = reward_total
+
             if done:
                 print("Episode finished after {} timesteps".format(t+1))
                 # Update statistics for the episode
                 print(f'with a reward of {reward_total}')
                 statistics['rewards'][episode_cnt] = reward_total
                 statistics['lap_times'][episode_cnt] = t+1
+                statistics['max_reward_in_episode'][episode_cnt] = max_reward
                 if (episode_cnt % snapshot_freq == 0 and episode_cnt != 0):
                     print(f'saving snapshot files to {snapshots_dir}/{episode_cnt:10d}_*.json')
                     save_snapshot(Q,statistics,snapshots_dir,f'{episode_cnt:010d}')
