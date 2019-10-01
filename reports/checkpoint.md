@@ -46,7 +46,7 @@ This is not reflected in the plotted results because we are graphing the total a
 In later episodes, the car accelerates down the initial straightaway, but misses the first turn.
 This causes it to go off the track.
 The reward continues to deprecate until the time limit (1000 steps) is reached.
-Because of this, the final reward per episode metric only measures the total tiles visited, ignoring how quickly the tiles were traversed (unless the full track was completed within 1000 steps). In future runs we will store the maximum reward accumulated within each episode (at any timestep), to reflect this partial learning.
+Because of this, the final reward per episode metric only measures the total tiles visited, ignoring how quickly the tiles were traversed (unless the full track was completed within 1000 steps). In future runs it would be good to store the maximum reward accumulated within each episode (at any timestep), to reflect this partial learning.
 
 ## Difficulties
 

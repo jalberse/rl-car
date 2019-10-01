@@ -142,6 +142,7 @@ def save_snapshot(Q,statistics,directory,filename_prefix):
     data = {
         'rewards': statistics['rewards'].tolist(),
         'lap_times': statistics['lap_times'].tolist(),
+        'max_reward_in_episode': statistics['max_reward_in_episode'].tolist(),
     }
     
     if (os.path.isdir(directory)):
