@@ -10,6 +10,7 @@ gym = {extras = ["all"],version = "*"}
 mujoco-py = "<2.1,>=2.0"
 box2d = "*"
 box2d-kengz = "*"
+matplotlib = "*"
 
 [requires]
 python_version = "3.7"
