@@ -15,10 +15,6 @@
 2 | 0.99 | 0.01 | 0.9 | 0.99 | 0.01 |
 *Parameters for training runs.*
 
-| discount rate | learning rate | epsilon | epsilon decay | epsilon floor |
-|--|--|--|--|--|
-
-
 #### Training Run 1
 
 The first training run was used to establish a baseline for the performance of our agent against the full problem. The issues we encountered in this run inform subsequent experiments.
