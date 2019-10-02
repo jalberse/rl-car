@@ -14,8 +14,8 @@ if __name__ == '__main__':
     # Graph rewards
     # TODO Ensure labels, slicing, etc fine for each generated graph. 
     # Easier to manually change this utility script than make it robust during development.
-    plt.plot(data['rewards'][0:14500:1])
+    plt.plot(data['rewards'][0:6000:1])
     plt.ylabel('Reward')
     plt.xlabel('Episode')
-    plt.title('Training run 2')
+    plt.title('Training run 3')
     plt.show()
