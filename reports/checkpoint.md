@@ -11,9 +11,11 @@
 
 | Run | discount rate | learning rate | epsilon | epsilon decay | epsilon floor |
 |--|--|--|--|--|--|
-1 | 0.99 | 0.01 | 0.9 | N/A | N/A |
+1 | 0.99 | 0.01 | 0.05 | N/A | N/A |
 2 | 0.99 | 0.01 | 0.9 | 0.99 | 0.01 |
 *Parameters for training runs.*
+
+TODO: Par down commentary by a lot, probably don't split into training runs like this
 
 #### Training Run 1
 
