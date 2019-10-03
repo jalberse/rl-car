@@ -56,6 +56,7 @@ supports our hypothesis that the state space was too large, as we began
 to observe real learning.
 A smaller state space means we visit the same states more often, necessitating less exploration and allowing for faster training.
 
+Like Q-learning, training the agent using TD-learning had memory issues with the default state size so we used OpenCV package to preprocess the env generated frame signicantly reducing the overall size. Despite 
 \section{Difficulties}
 
 Training is simply too slow, as each episode takes too long.
