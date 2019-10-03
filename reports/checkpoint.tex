@@ -36,7 +36,7 @@ reduce this memory usage greatly.
 Training run 1 was against an 84x96 binary state. The issues we
 encountered in this run helped inform subsequent experiments. There is
 no learning apparent in its results, as the agent performs similarly to
-an agent randomnly walking.
+an agent randomly walking.
 
 We hypothesized that the single largest issue was too large of a state
 space. For the second training run, we downsample the state, grabbing
@@ -58,8 +58,9 @@ A smaller state space means we visit the same states more often, necessitating l
 
 \section{Difficulties}
 
-The car is unable to make the first left turn. Each episode is also
-long, making training slow, making the turning problem worse.
+Training is simply too slow, as each episode takes too long.
+For simple problems like "go fast in the straightaway," the agent can learn well enough.
+But without many more episodes, the car will simply not learn to take the first turn.
 
 \section{Next steps}
 
