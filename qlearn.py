@@ -13,6 +13,7 @@ from collections import defaultdict
 
 np.set_printoptions(threshold=sys.maxsize)
 
+# TODO wrap functions, etc in class so we don't have to rely on a constant like this
 ACTION_SPACE_SIZE = 9 # Number of possible actions
 
 def e_greedy(Q,state,epsilon):
@@ -61,7 +62,7 @@ def q_learning_train(env,
     # Action space is [steer, gas, brake] with bounds [[-1,1],[0,1],[0,1]] in real numbers
     # We choose to discretize s.t.
     # steer is in T = {-1, 0, 1} (left, straight, right)
-    # gas is in   G = {0,1} (gas or no gas)
+    # gas is in   G = {0, 1} (gas or no gas)
     # and brake   B = {0, 1} (brake or no brake)
     # This discretization should be OK - it is how controls for humans are discretized, after all
     #   Note: I think some literature on this environ also discretizes in this way. Check.
@@ -70,15 +71,15 @@ def q_learning_train(env,
 
     # Maps action_key index to action the env can understand
     actions = [
-        [0.,0.,0.],
-        [0.,0.,1.],
-        [0.,1.,0.],
-        [-1.,0.,0.],
-        [-1.,0.,1.],
-        [-1.,1.,0.],
-        [1.,0.,0.],
-        [1.,0.,1.],
-        [1.,1.,0.],
+        [0.,0.,0.],  # Coast straight
+        [0.,0.,1.],  # Brake straight
+        [0.,1.,0.],  # Accelerate straight
+        [-1.,0.,0.], # Left turn coast
+        [-1.,0.,1.], # Left turn brake
+        [-1.,1.,0.], # Left turn accelerate
+        [1.,0.,0.],  # Right turn coast
+        [1.,0.,1.],  # Right turn brake
+        [1.,1.,0.],  # Right turn accelerate
     ]
 
     # Keep track of information we want to plot later
@@ -128,7 +129,7 @@ def q_learning_train(env,
                 statistics['rewards'][episode_cnt] = reward_total
                 statistics['lap_times'][episode_cnt] = t+1
                 statistics['max_reward_in_episode'][episode_cnt] = max_reward
-                if (episode_cnt % snapshot_freq == 0 and episode_cnt != 0):
+                if (episode_cnt % snapshot_freq == 0):
                     print(f'saving snapshot files to {snapshots_dir}/{episode_cnt:10d}_*.json')
                     save_snapshot(Q,statistics,snapshots_dir,f'{episode_cnt:010d}')
                 # break to next episode
@@ -139,6 +140,7 @@ def q_learning_train(env,
 def save_snapshot(Q,statistics,directory,filename_prefix):
     # Saves a snapshot to the given directory with the given filename prefix
     # Saves Q in its own file (very large) and statistics in another
+    # TODO make a function which automatically converts stats to json so we don't need to manually convert each item
     data = {
         'rewards': statistics['rewards'].tolist(),
         'lap_times': statistics['lap_times'].tolist(),
@@ -163,7 +165,7 @@ if __name__ == '__main__':
     )
 
     env = gym.make('CarRacing-v1')
-    episodes = 20001
+    episodes = 500000
     discount_rate = 0.99
     learning_rate = 0.01
     epsilon = 0.9
