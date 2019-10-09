@@ -9,6 +9,7 @@ import pickle
 from preprocessing import rgb_to_bw_threshold
 import random
 import math
+import time
 from collections import defaultdict
 
 np.set_printoptions(threshold=sys.maxsize)
@@ -86,10 +87,14 @@ def q_learning_train(env,
     statistics = dict([
         ('rewards',np.zeros(num_episodes)), # Total reward obtained this episode
         ('lap_times',np.zeros(num_episodes)), # Timesteps taken in episode
-        ('max_reward_in_episode',np.zeros(num_episodes)) # Maximum total reward within each episode (NOT final/total accumulated)
+        ('max_reward_in_episode',np.zeros(num_episodes)), # Maximum total reward within each episode (NOT final/total accumulated)
+        ('episode_time',np.zeros(num_episodes)),
     ])
 
+    render = False
+
     for episode_cnt in range(num_episodes):
+        episode_start_time = time.time()
         print(f'Episode: {episode_cnt}')
         if (epsilon > epsilon_floor):
             epsilon = epsilon * epsilon_decay
@@ -100,10 +105,17 @@ def q_learning_train(env,
         max_reward = -9999
         # Get the initial state
         state = rgb_to_bw_threshold(observation) # State is bitpacked into a uint8 tuple
+
+        if (episode_cnt % 500 == 0):
+            render = True
+        else:
+            render = False
+
         # Game loop
         while(True):
             t += 1
-            env.render()
+            if (render):
+                env.render()
 
             # Take action a, observe r, s'
             action_key = e_greedy(Q,state,epsilon)
@@ -129,6 +141,12 @@ def q_learning_train(env,
                 statistics['rewards'][episode_cnt] = reward_total
                 statistics['lap_times'][episode_cnt] = t+1
                 statistics['max_reward_in_episode'][episode_cnt] = max_reward
+                elapsed = time.time() - episode_start_time
+                statistics['episode_time'][episode_cnt] = elapsed
+                
+                # TODO remove: testing
+                print(f'Episode finished in {elapsed}')
+
                 if (episode_cnt % snapshot_freq == 0):
                     print(f'saving snapshot files to {snapshots_dir}/{episode_cnt:10d}_*.json')
                     save_snapshot(Q,statistics,snapshots_dir,f'{episode_cnt:010d}')
@@ -140,12 +158,10 @@ def q_learning_train(env,
 def save_snapshot(Q,statistics,directory,filename_prefix):
     # Saves a snapshot to the given directory with the given filename prefix
     # Saves Q in its own file (very large) and statistics in another
-    # TODO make a function which automatically converts stats to json so we don't need to manually convert each item
-    data = {
-        'rewards': statistics['rewards'].tolist(),
-        'lap_times': statistics['lap_times'].tolist(),
-        'max_reward_in_episode': statistics['max_reward_in_episode'].tolist(),
-    }
+
+    data = {}
+    for key in statistics:
+        data[key] = statistics[key].tolist()
     
     if (os.path.isdir(directory)):
         with open(os.path.join(directory,f'{filename_prefix}_Q.pkl'),'wb') as f:

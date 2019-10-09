@@ -15,9 +15,9 @@ def rgb_to_bw_threshold(img):
     '''
     bw = cv.cvtColor(img,cv.COLOR_BGR2GRAY)
     bw = bw[0:84, 0:96] # Crop out HUD at bottom
-    thresh = cv.inRange(bw,0,150)[::4,::4] # 84x96 0 or 255 downsample to 21x24
-    cv.imshow("state",thresh)
-    cv.waitKey(1)
+    thresh = cv.inRange(bw,0,150)[::8,::8] # 84x96 0 or 255 downsample every 8th pixel
+    # cv.imshow("state",thresh)
+    # cv.waitKey(1)
     thresh[thresh > 0] = 1 # set to 1 if not 0
     packed = np.packbits(thresh) # Flatten and pack into uint8 array
     state = tuple(packed.tolist()) # pack into non-mutable tuple for hashing

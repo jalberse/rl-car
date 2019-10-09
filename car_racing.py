@@ -366,6 +366,7 @@ class CarRacing(gym.Env, EzPickle):
 
     def render(self, mode='human'):
         assert mode in ['human', 'state_pixels', 'rgb_array']
+
         if self.viewer is None:
             from gym.envs.classic_control import rendering
             self.viewer = rendering.Viewer(WINDOW_W, WINDOW_H)
