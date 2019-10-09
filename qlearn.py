@@ -87,8 +87,6 @@ def q_learning_train(env,
         ('episode_time',np.zeros(num_episodes)),
     ])
 
-    render = False
-
     for episode_cnt in range(num_episodes):
         episode_start_time = time.time()
         print(f'Episode: {episode_cnt}')
@@ -102,10 +100,7 @@ def q_learning_train(env,
         # Get the initial state
         state = rgb_to_bw_threshold(observation) # State is bitpacked into a uint8 tuple
 
-        if (episode_cnt % 500 == 0):
-            render = True
-        else:
-            render = False
+        render = False
 
         # Game loop
         while(True):
