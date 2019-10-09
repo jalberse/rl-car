@@ -15,7 +15,7 @@ from collections import defaultdict
 np.set_printoptions(threshold=sys.maxsize)
 
 # TODO wrap functions, etc in class so we don't have to rely on a constant like this
-ACTION_SPACE_SIZE = 9 # Number of possible actions
+ACTION_SPACE_SIZE = 5 # Number of possible actions
 
 def e_greedy(Q,state,epsilon):
     """
@@ -76,11 +76,7 @@ def q_learning_train(env,
         [0.,0.,1.],  # Brake straight
         [0.,1.,0.],  # Accelerate straight
         [-1.,0.,0.], # Left turn coast
-        [-1.,0.,1.], # Left turn brake
-        [-1.,1.,0.], # Left turn accelerate
         [1.,0.,0.],  # Right turn coast
-        [1.,0.,1.],  # Right turn brake
-        [1.,1.,0.],  # Right turn accelerate
     ]
 
     # Keep track of information we want to plot later

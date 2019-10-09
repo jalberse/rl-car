@@ -361,6 +361,7 @@ class CarRacing(gym.Env, EzPickle):
             if abs(x) > PLAYFIELD or abs(y) > PLAYFIELD:
                 done = True
                 step_reward = -100
+            # TODO: Exit if far off playfield
 
         return self.state, step_reward, done, {}
 
