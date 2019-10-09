@@ -1,0 +1,23 @@
+General TODO
+- Implement eligibility traces
+- Implement heuristic
+- Script to load Q and display it running on the track
+
+Experimental Components
+- Experiment 1
+	- Hypothesis: Q-learning with replacing traces will learn more quickly than pure Q-learning.
+	- 5 runs straight Q-learning
+	- 5 runs with replacing traces
+- Experiment 2
+	- Hypothesis: Guiding exploration with a heuristic will improve learning speed.
+	- 5 runs without heuristic
+	- 5 runs with heuristic
+
+Reading related papers
+- Paper 1
+	- Compare and contrast approach
+- Paper 2
+	- Compare and contrast approach
+
+Cmoparison
+- Comparison 1
