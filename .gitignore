@@ -2,6 +2,7 @@ snapshots/*
 
 run_model.py
 
+*.swp
 *.log
 *.aux
 *.pdf

@@ -1,7 +1,7 @@
 General TODO
-- Implement eligibility traces
+X Implement eligibility traces
 - Implement heuristic
-- Script to load Q and display it running on the track
+X Script to load Q and display it running on the track
 
 Experimental Components
 - Experiment 1
