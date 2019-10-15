@@ -1,5 +1,7 @@
 snapshots/*
 
+run_model.py
+
 *.log
 *.aux
 *.pdf
