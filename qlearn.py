@@ -180,11 +180,13 @@ if __name__ == '__main__':
     epsilon_floor = .01
     snapshot_freq = 500
     
+    if (len(sys.argv) > 1):
+        run_name = sys.argv[1]
+    else:
+        now = datetime.datetime.now()
+        run_name = f'{now.year}_{now.month}_{now.day}_{now.hour}_{now.minute}_{now.microsecond}'
 
-    now = datetime.datetime.now()
-    timestamp = f'{now.year}_{now.month}_{now.day}_{now.hour}_{now.minute}_{now.microsecond}'
-
-    snapshots_dir = f'snapshots/snapshots_{timestamp}'
+    snapshots_dir = f'snapshots/snapshots_{run_name}'
     os.mkdir(snapshots_dir)
 
     # Train the model
